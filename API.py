@@ -38,7 +38,3 @@ def lineNumbers(textFile, token):
             found.append((i+1, lines[i]))
     print("Found",len(found),"matching lines")
     return found
-
-
-
-print(lineNumbers("/home/ninja/data/IIT-MANDI/semester-5/LAP/assignment-3/sampleTextFile","gandhi"))
