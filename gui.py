@@ -10,8 +10,9 @@ from matplotlib.figure import Figure
 
 #-------------window and tabs-----------------------
 window = tk.Tk()
-window.geometry("1300x1000")
 window.title("Text Analysis App")
+window.attributes("-zoomed",True)   #ubuntu
+#window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
 tab1 = ttk.Frame(tabControl)
@@ -63,7 +64,7 @@ def freq_graph():
     word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
     
     # figure to show graph
-    fig = Figure(figsize=(8,4), dpi=100)
+    fig = Figure(figsize=(12,4), dpi=100)
     fig.add_subplot(111).bar(word_list, word_count_list)
     
     canvas = FigureCanvasTkAgg(fig, master=tab1)
@@ -157,7 +158,7 @@ extract_button = tk.Button(tab2, text="Get lines", command= extract_data, font=c
 extract_button.grid(row=18,column=3, pady=(40,5))
 label_show = tk.Label(tab2, text="Sentences with keywords:- ")
 label_show.grid(row=19, column=3)
-text_box = tk.Text(tab2, height=50, width=120)
+text_box = tk.Text(tab2, height=50, width=150)
 text_box.grid(row=20,column=4)
 
 
