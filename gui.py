@@ -7,11 +7,50 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from matplotlib.figure import Figure
 import API
 
+# ----------- Custom Classes ----------------------
+class CustomText(tk.Text):
+    '''A text widget with a new method, highlight_pattern()
+
+    example:
+
+    text = CustomText()
+    text.tag_configure("red", foreground="#ff0000")
+    text.highlight_pattern("this should be red", "red")
+
+    The highlight_pattern method is a simplified python
+    version of the tcl code at http://wiki.tcl.tk/3246
+    '''
+    def __init__(self, *args, **kwargs):
+        tk.Text.__init__(self, *args, **kwargs)
+
+    def highlight_pattern(self, pattern, tag, start="1.0", end="end",
+                        regexp=False):
+        '''Apply the given tag to all text that matches the given pattern
+
+        If 'regexp' is set to True, pattern will be treated as a regular
+        expression.
+        '''
+
+        start = self.index(start)
+        end = self.index(end)
+        self.mark_set("matchStart", start)
+        self.mark_set("matchEnd", start)
+        self.mark_set("searchLimit", end)
+
+        count = tk.IntVar()
+        while True:
+            index = self.search(pattern, "matchEnd","searchLimit",
+                                count=count, regexp=regexp)
+            if index == "": break
+            self.mark_set("matchStart", index)
+            self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
+            self.tag_add(tag, "matchStart", "matchEnd")
+
 
 #-------------window and tabs-----------------------
 window = tk.Tk()
 window.title("Text Analysis App")
-window.attributes("-zoomed",True)   #ubuntu
+# window.attributes("-zoomed",True)   #ubuntu
 #window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
@@ -29,15 +68,19 @@ count_words = tk.StringVar()
 word_most = tk.StringVar()
 word_least = tk.StringVar()
 lines_with_keywords = tk.StringVar()
-file_selected = tk.StringVar()
+main_file = tk.StringVar()
+keyword_file = tk.StringVar()
 fig = Figure(figsize=(12,4), dpi=100)
 
 
 # ----------functions--------------------------------
 # function to open and access file
-def open_file():
+def open_file(is_keyword_file = False):
     file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
-    file_selected.set(file)
+    if (not is_keyword_file): 
+        main_file.set(file)
+    else:
+        keyword_file.set(file)
     file = open(file,"r")   # opened in r mode
     data = file.read()      # file info stored in data var
     
@@ -58,7 +101,7 @@ def refresh_file():
 # set stats variable inside this function
 def calc():
     
-    file_path = file_selected.get()   ## file path of selected file
+    file_path = main_file.get()   ## file path of selected file
     print("File path is-",file_path)
     
     ## calculating most frequent word
@@ -83,7 +126,7 @@ def calc():
 # function to plot graph
 def freq_graph():
     fig.clf()
-    file_path = file_selected.get()
+    file_path = main_file.get()
     word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
     word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
     mapping = API.wordMapper(file_path)
@@ -104,15 +147,6 @@ def freq_graph():
     toolbar= NavigationToolbar2Tk(canvas,toolbarFrame)
     toolbar.update()
     canvas.get_tk_widget().grid(row=14,column=4)
-    
-
-# find lines with keywords
-def extract_data():
-    text_box.delete('1.0',tk.END)
-    # set extracted in var lines_with_keywords
-    lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
-    text_box.insert(tk.END, lines_with_keywords)
-
 
 
 #----------------GUI objects----------------------------------
@@ -174,7 +208,7 @@ label_key2 = tk.Label(tab2, text = "-   File")
 label_key2.grid(row=15, column=3,pady=(80,5))
 label_key2.config(font=("Courier",20))
 
-open_button_key = tk.Button(tab2, text="select file", command=open_file)  # open file fn used here
+open_button_key = tk.Button(tab2, text="select file", command=lambda: open_file(is_keyword_file=True))  # open file fn used here
 open_button_key.grid(row=16, column=2)
 
 refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file)   # refresh file fn used here
@@ -182,12 +216,13 @@ refresh_button_key.grid(row=16, column=3)
 
 
 #show sentences with keywords
-extract_button = tk.Button(tab2, text="Get lines", command= extract_data, font=custom_font)
+extract_button = tk.Button(tab2, text="Get lines", command= lambda: extract_data(debug=True), font=custom_font)
 extract_button.grid(row=18,column=3, pady=(40,5))
 label_show = tk.Label(tab2, text="Sentences with keywords:- ")
 label_show.grid(row=19, column=3)
-text_box = tk.Text(tab2, height=50, width=150)
+text_box = CustomText(tab2, height=50, width=150)
 text_box.grid(row=20,column=4)
+text_box.tag_configure("highlight", foreground="red", background="black")
 
 
 
