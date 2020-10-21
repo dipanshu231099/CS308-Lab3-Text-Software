@@ -5,7 +5,7 @@ from tkinter import filedialog
 from tkinter import font
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
-
+import API
 
 
 #-------------window and tabs-----------------------
@@ -29,6 +29,7 @@ count_words = tk.StringVar()
 word_most = tk.StringVar()
 word_least = tk.StringVar()
 lines_with_keywords = tk.StringVar()
+file_selected = tk.StringVar()
 
 
 
@@ -36,10 +37,11 @@ lines_with_keywords = tk.StringVar()
 # function to open and access file
 def open_file():
     file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
+    file_selected.set(file)
     file = open(file,"r")   # opened in r mode
     data = file.read()      # file info stored in data var
     
-    print(data)             # use file
+    #print(data)             # use file
     
     file.close()            # close file
 
@@ -52,17 +54,39 @@ def refresh_file():
     
 # set stats variable inside this function
 def calc():
-    word_most.set("lincoln") # eg- set most freq word= lincoln
-    word_least.set("trump")
+    
+    file_path = file_selected.get()   ## file path of selected file
+    print("File path is-",file_path)
+    
+    ## calculating most frequent word
+    most_freq = (API.mostOccuringWords(file_path))[0][0]
+    print("Most frquent word is" , most_freq)
+    word_most.set(most_freq)
+
+    ## calculating least frequent word
+    least_freq = (API.leastOccuringWord(file_path))[0][0]
+    print("Least frquent word is" , least_freq)
+    word_least.set(least_freq)
+
+    ## 
     count_sentence.set("10")
-    count_words.set("50")
+
+    ## Calculating words count
+    word_count = (API.WordCounter(file_path)) 
+    print("The word count is" , word_count)
+    count_words.set(word_count)
 
 
 # function to plot graph
 def freq_graph():
+    file_path = file_selected.get()
     word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
     word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
-    
+    mapping = API.wordMapper(file_path)
+    word_list = list(mapping.keys())
+    word_count_list = list(mapping.values())
+
+
     # figure to show graph
     fig = Figure(figsize=(12,4), dpi=100)
     fig.add_subplot(111).bar(word_list, word_count_list)

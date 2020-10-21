@@ -1,7 +1,7 @@
 from string import punctuation
 
 #defining set of words to skip will calculating various actions
-articles = ['a','an','the']
+articles = ['a','an','the',"i","is","and","are","in"]
 
 def removePunctuations(string):
     """
