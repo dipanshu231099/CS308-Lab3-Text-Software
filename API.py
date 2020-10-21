@@ -249,3 +249,18 @@ def extractNouns(filepath, debug=False):
     tokenized = nltk.word_tokenize(text)
     nouns = [word for (word, pos) in nltk.pos_tag(tokenized) if is_noun(pos)] 
     return nouns
+
+def keywordMapper(sentences, keywords, debug=False):
+    """
+    extract sentences from the given text file
+    INPUT:  sentences -> list of all the sentences; keywords -> list of all keywords
+    OUTPUT: defaultdict(list) onbject with all keywords mapped to the sentences which contains them
+    Options: pass debug=1 as argument for console results
+    """
+    kwrd_sent_map = defaultdict(list)
+    for kwrd in keywords:
+        for sentence in sentences:
+            if kwrd in sentence:
+                kwrd_sent_map[kwrd].append(sentence)
+    if debug: print("Keywords-Sentences-Map: ", kwrd_sent_map)
+    return kwrd_sent_map
