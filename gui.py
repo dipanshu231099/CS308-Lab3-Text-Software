@@ -190,7 +190,37 @@ entry_ct_words = tk.Entry(tab1, textvariable=count_words)
 entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
 #tk.Label(window, text="field").grid(row=11, column=3)
-#x = tk.Entry(window, textvariable=variable_to_set)
+#x = tk.Entry(w# find lines with keywords
+def extract_data(debug=False):
+
+    main_file_path = main_file.get()   # file path of selected file
+    if debug: print("File path is-",main_file_path)
+
+    keyword_file_path = keyword_file.get()
+    if debug: print("Keyword file path -", keyword_file_path)
+
+    keywords = API.extractKeywords(keyword_file_path)
+    if debug: print("Keywords: ", keywords)
+
+    sentences = API.extractSentences(main_file_path)
+    if debug: print("sentences: ", sentences)
+
+    kwrd_sent_map = API.keywordMapper(sentences, keywords)
+    if debug: print("Keywords-Sentences-Map: ", kwrd_sent_map)
+
+
+    text_box.delete('1.0',tk.END)
+    # set extracted in var lines_with_keywords
+    # lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
+    # text_box.insert(tk.END, lines_with_keywords)
+
+    for kwrds, sentences in kwrd_sent_map.items():
+        text_box.insert(tk.END, f"{kwrds} is found in following sentences - \n")
+        for sentence in sentences:
+            text_box.insert(tk.END, f"{sentence}\n")
+        text_box.insert(tk.END, "\n")
+        text_box.highlight_pattern(kwrds, "highlight")
+        indow, textvariable=variable_to_set)
 #x.grid(row=11, column=4)
 
 
