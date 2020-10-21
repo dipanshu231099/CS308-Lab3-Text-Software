@@ -214,3 +214,38 @@ def extractKeywords(textFile, debug=0):
     
     return words
 
+# ------ functions using NLTK -------
+def extractSentences(filepath, debug=False):
+    """
+    extract sentences from the given text file
+    INPUT:  File name as string
+    OUTPUT: list of all the sentences after removing all the punctuations
+    Options: pass debug=1 as argument for console results
+    """
+    try:
+        txt = open(filepath).read()
+    except:
+        print("No such file found. Aborting...")
+        exit()
+    sentences = nltk.sent_tokenize(txt)
+    sentences = [removePunctuations(sentence) for sentence in sentences]
+    return sentences
+
+def extractNouns(filepath, debug=False):
+    """
+    extract nouns from the given text file
+    INPUT:  File name as string
+    OUTPUT: list of all the nouns
+    Options: pass debug=1 as argument for console results
+    """
+    try:
+        text = open(filepath).read()
+    except:
+        print("No such file found. Aborting...")
+        exit()
+    
+    is_noun = lambda pos: pos[:2] == 'NN'
+    # do the nlp stuff
+    tokenized = nltk.word_tokenize(text)
+    nouns = [word for (word, pos) in nltk.pos_tag(tokenized) if is_noun(pos)] 
+    return nouns
