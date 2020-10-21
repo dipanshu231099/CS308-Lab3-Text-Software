@@ -126,7 +126,7 @@ def mostOccuringWords(textFile, debug=0):
 def leastOccuringWord(textFile, debug=0):
     """
     INPUT:  string, input file, path can be relative or absolute
-    OUTPUT: list of most occuring words
+    OUTPUT: list of least occuring words
     Options: pass debug=1 as argument for console results
     """
     try:
