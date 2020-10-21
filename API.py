@@ -1,4 +1,6 @@
 from string import punctuation
+import nltk
+from collections import defaultdict
 
 #defining set of words to skip will calculating various actions
 articles = ['a','an','the',"i","is","and","are","in"]
@@ -187,3 +189,28 @@ def WordCounter(textFile, debug=0):
     if debug:
         print(len(mapping.keys()))
     return len(mapping.keys())
+
+
+def extractKeywords(textFile, debug=0):
+    """
+    INPUT:   file path as string
+    OUTPUT:  list of all the words separated by newline or space
+    Options: debug mode pass, debug=1
+    """
+    try:
+        txt = open(textFile).read()
+    except:
+        print("No such file found. Aborting...")
+        exit()
+    lines=txt.split('\n')
+    words = []
+    for line in lines:
+        words_in_line = line.split(" ")
+        if debug:
+            print(words_in_line)
+        words.extend(words_in_line)
+
+    words = list(filter(None, words)) # removes empty string (which might come due to space and immediate \n)
+    
+    return words
+
