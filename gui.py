@@ -30,7 +30,7 @@ word_most = tk.StringVar()
 word_least = tk.StringVar()
 lines_with_keywords = tk.StringVar()
 file_selected = tk.StringVar()
-
+fig = Figure(figsize=(12,4), dpi=100)
 
 
 # ----------functions--------------------------------
@@ -48,7 +48,10 @@ def open_file():
 
 # refresh file to update info
 def refresh_file():
+    calc()
+    #canvas.delete("all")
     
+    freq_graph()
     print("function to refresh file")
 
     
@@ -79,6 +82,7 @@ def calc():
 
 # function to plot graph
 def freq_graph():
+    fig.clf()
     file_path = file_selected.get()
     word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
     word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
@@ -88,7 +92,7 @@ def freq_graph():
 
 
     # figure to show graph
-    fig = Figure(figsize=(12,4), dpi=100)
+    #fig = Figure(figsize=(12,4), dpi=100)
     fig.add_subplot(111).bar(word_list, word_count_list)
     
     canvas = FigureCanvasTkAgg(fig, master=tab1)
