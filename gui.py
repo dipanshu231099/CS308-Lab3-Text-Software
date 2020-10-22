@@ -116,8 +116,9 @@ def calc():
     print("Least frquent word is" , least_freq)
     word_least.set(least_freq)
 
-    ## 
-    count_sentence.set("10")
+    ## Number of sentences/lines
+    sentence_count = API.lineCounter(file_path)
+    count_sentence.set(sentence_count)
 
     ## Calculating words count
     word_count = (API.WordCounter(file_path)) 
