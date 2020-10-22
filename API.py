@@ -1,5 +1,6 @@
 from string import punctuation
 import nltk
+nltk.download('punkt')
 from collections import defaultdict
 
 #defining set of words to skip will calculating various actions
