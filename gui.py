@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 22 16:22:52 2020
+
+@author: Ujjwal Soni
+"""
+
 # ---------------imports and initializers---------------
 import tkinter as tk
 from tkinter import ttk
@@ -11,7 +18,7 @@ from matplotlib.figure import Figure
 #-------------window and tabs-----------------------
 window = tk.Tk()
 window.title("Text Analysis App")
-window.attributes("-zoomed",True)   #ubuntu
+#window.attributes("-zoomed",True)   #ubuntu
 #window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
@@ -89,43 +96,50 @@ def extract_data():
 
 #----------------GUI objects----------------------------------
 custom_font = font.Font(family='Helvetica', size=15)    # font
-# tab-1    
-label = tk.Label(tab1, text = "Text Analytics")
-label.grid(row=1, column=4, pady=(40,0))
+# tab-1
+label = tk.Label(tab1, text = "")
+label.grid(row=1, column=4)
 label.config(width=30)
 label.config(font=("Courier",44))
-
+ss="Text Analytics Software  "
+count=0
+text=''
+SliderLabel= tk.Label(tab1,text=text,font=('chiller',20),relief=RIDGE,borderwidth=5,width=35,bg='white')
+SliderLabel.place(x=400,y=5)
+introlabeltick()
 # main file
-label_main = tk.Label(tab1, text = "Main File")
+label_main = tk.Label(tab1, text = "Main File",)
 label_main.grid(row=3, column=2,padx=20,pady=(50,5))
-label_main.config(font=("Courier",15))
+label_main.config(font=("chiller",20,'bold'))
 
-open_button_main = tk.Button(tab1, text="select file", command=open_file) # open file fn used here
-open_button_main.grid(row=4, column=2)
+open_button_main = tk.Button(tab1, text="Select file",font=('chiller',10,'bold'),width=20,bd=6,relief=RIDGE,activebackground='white', command=open_file) # open file fn used here
+open_button_main.grid(row=5, column=2)
 
-refresh_button_main = tk.Button(tab1, text="Refresh file", command=refresh_file)  # refresh file fn used here
-refresh_button_main.grid(row=4, column=3)
+refresh_button_main = tk.Button(tab1, text="Refresh file",font=('chiller',10,'bold'),width=20,bd=6,relief=RIDGE,activebackground='white', command=refresh_file)  # refresh file fn used here
+refresh_button_main.grid(row=5, column=3)
 
-
+label_main = tk.Label(tab1, text = "Word Statistics",)
+label_main.grid(row=6, column=2,padx=20,pady=(50,5))
+label_main.config(font=("chiller",20,'bold'))
 # stats
-stats_button = tk.Button(tab1, text="Calculate stats", command= calc, font=custom_font) # calc fn used here
-stats_button.grid(row=6, column=2, pady=(50,5), padx=(20,0))
+stats_button = tk.Button(tab1, text="Calculate stats", command= calc,font=('chiller',10,'bold'),width=20,bd=6,relief=RIDGE,activebackground='white') # calc fn used here
+stats_button.grid(row=7, column=2, pady=(20,5))
 
-tk.Label(tab1, text="Most frequent word").grid(row=7, column=2)
+tk.Label(tab1, text="Most frequent word").grid(row=8, column=2)
 entry_most = tk.Entry(tab1, textvariable=word_most)
-entry_most.grid(row=7, column=3, pady=(0,5), padx=(20,0))
+entry_most.grid(row=8, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="Least frequent word").grid(row=8, column=2)
+tk.Label(tab1, text="Least frequent word").grid(row=9, column=2)
 entry_least = tk.Entry(tab1, textvariable=word_least)
-entry_least.grid(row=8, column=3, pady=(0,5), padx=(20,0))
+entry_least.grid(row=9, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="No. of sentence").grid(row=9, column=2)
+tk.Label(tab1, text="No. of sentence").grid(row=10, column=2)
 entry_ct_sentence = tk.Entry(tab1, textvariable=count_sentence)
-entry_ct_sentence.grid(row=9, column=3, pady=(0,5), padx=(20,0))
+entry_ct_sentence.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="No. of words").grid(row=10, column=2)
+tk.Label(tab1, text="No. of words").grid(row=11, column=2)
 entry_ct_words = tk.Entry(tab1, textvariable=count_words)
-entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
+entry_ct_words.grid(row=11, column=3, pady=(0,5), padx=(20,0))
 
 #tk.Label(window, text="field").grid(row=11, column=3)
 #x = tk.Entry(window, textvariable=variable_to_set)
@@ -133,8 +147,12 @@ entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
 
 # histogram
-graph_button = tk.Button(tab1, text="Frequency Graph", command=freq_graph, font=custom_font)
-graph_button.grid(row=13, column=2, pady=(50,0), padx=(20,0))
+label_main = tk.Label(tab1, text = "Histogram",)
+label_main.grid(row=12, column=2,padx=20,pady=(25,5))
+label_main.config(font=("chiller",20,'bold'))
+
+graph_button = tk.Button(tab1, text="Frequency Graph", command=freq_graph,font=('chiller',10,'bold'),width=20,bd=6,relief=RIDGE,activebackground='white')
+graph_button.grid(row=13, column=2, pady=(10,0))
 
 
 #tab-2
