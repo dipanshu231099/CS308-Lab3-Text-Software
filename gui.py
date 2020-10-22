@@ -97,6 +97,8 @@ def refresh_file():
     freq_graph()
     print("function to refresh file")
 
+
+
     
 # set stats variable inside this function
 def calc():
@@ -220,9 +222,11 @@ def extract_data(debug=False):
             text_box.insert(tk.END, f"{sentence}\n")
         text_box.insert(tk.END, "\n")
         text_box.highlight_pattern(kwrds, "highlight")
-        indow, textvariable=variable_to_set)
+        indow, textvariable=variable_to_set
 #x.grid(row=11, column=4)
-
+def refresh_file_tab2():
+    extract_data()
+    print("Tab2 refresh")
 
 # histogram
 graph_button = tk.Button(tab1, text="Frequency Graph", command=freq_graph, font=custom_font)
@@ -241,7 +245,7 @@ label_key2.config(font=("Courier",20))
 open_button_key = tk.Button(tab2, text="select file", command=lambda: open_file(is_keyword_file=True))  # open file fn used here
 open_button_key.grid(row=16, column=2)
 
-refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file)   # refresh file fn used here
+refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file_tab2)   # refresh file fn used here
 refresh_button_key.grid(row=16, column=3)
 
 
