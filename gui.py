@@ -6,6 +6,7 @@ Created on Thu Oct 22 16:22:52 2020
 """
 
 # ---------------imports and initializers---------------
+from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
