@@ -67,6 +67,8 @@ count_sentence = tk.StringVar()
 count_words = tk.StringVar()
 word_most = tk.StringVar()
 word_least = tk.StringVar()
+path_of_file= tk.StringVar()
+path_of_file2= tk.StringVar()
 lines_with_keywords = tk.StringVar()
 main_file = tk.StringVar()
 keyword_file = tk.StringVar()
@@ -79,8 +81,11 @@ def open_file(is_keyword_file = False):
     file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
     if (not is_keyword_file): 
         main_file.set(file)
+        path_of_file.set(file)
     else:
         keyword_file.set(file)
+        path_of_file2.set(file)
+    
     file = open(file,"r")   # opened in r mode
     data = file.read()      # file info stored in data var
     
@@ -162,8 +167,15 @@ label.config(font=("Courier",44))
 
 # main file
 label_main = tk.Label(tab1, text = "Main File")
-label_main.grid(row=3, column=2,padx=20,pady=(50,5))
+label_main.grid(row=3, column=2,pady=(50,5))
 label_main.config(font=("Courier",15))
+
+label_main = tk.Label(tab1, text = "File Selected : ")
+label_main.grid(row=5, column=2,padx=5,pady=(10,0))
+label_main.config(font=("Courier",10))
+pathoffile=" "
+ent = tk.Entry(tab1, textvariable=path_of_file,width=70)
+ent.grid(row=5, column=3, pady=(10,0), padx=(5,0))
 
 open_button_main = tk.Button(tab1, text="select file", command=open_file) # open file fn used here
 open_button_main.grid(row=4, column=2)
@@ -245,6 +257,13 @@ label_key2.config(font=("Courier",20))
 
 open_button_key = tk.Button(tab2, text="select file", command=lambda: open_file(is_keyword_file=True))  # open file fn used here
 open_button_key.grid(row=16, column=2)
+
+label_main = tk.Label(tab2, text = "File Selected : ")
+label_main.grid(row=17, column=2,padx=5,pady=(10,0))
+label_main.config(font=("Courier",10))
+pathoffile=" "
+ent = tk.Entry(tab2, textvariable=path_of_file2,width=70)
+ent.grid(row=17, column=3, pady=(10,0), padx=(5,0))
 
 refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file_tab2)   # refresh file fn used here
 refresh_button_key.grid(row=16, column=3)
