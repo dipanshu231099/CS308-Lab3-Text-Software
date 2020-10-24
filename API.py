@@ -37,17 +37,13 @@ def wordMapper(textFile,debug=0):
     except:
         print("No such file found. Aborting...")
         exit()
-
     #changing case of text file
     txt = txt.lower()
-
     # removing punctuation marks
-    txt = removePunctuations(txt)
-    
+    txt = removePunctuations(txt)   
     # removing useless lines
     lines=txt.split('\n')
     removeEmptyLines(lines)
-
     # creating the hash map for words
     mapping={}
     for i in range(len(lines)):
@@ -97,11 +93,9 @@ def mostOccuringWords(textFile, debug=0):
     except:
         print("No such file found. Aborting...")
         exit()
-  
     # removing empty lines
     lines=txt.split('\n')
     removeEmptyLines(lines)
-
     # creating the required hashmap
     mapping={}
     maximumOccurence=0
@@ -120,8 +114,7 @@ def mostOccuringWords(textFile, debug=0):
                 maximumOccurence=mapping[word]
     for word in mapping.keys():
         if(mapping[word]==maximumOccurence):
-            mostFrequent.append((word,maximumOccurence))
-    
+            mostFrequent.append((word,maximumOccurence))  
     if debug:
         print("List of most occuring words:",mostFrequent)
     return mostFrequent
@@ -137,11 +130,9 @@ def leastOccuringWord(textFile, debug=0):
     except:
         print("No such file found. Aborting...")
         exit()
-
     # making required hashmap
     mapping = wordMapper(textFile)
     minimumOccurence = min(mapping.values())
-
     # iterating within the map
     found=[]
     for word in mapping.keys():
@@ -162,12 +153,9 @@ def lineCounter(textFile, debug=0):
     except:
         print("No such file found. Aborting...")
         exit()
-
     lines=txt.split('\n')
-
     # removing useless lines
     removeEmptyLines(lines)
-
     # making a count of lines
     if debug:
         print("Number of lines:",len(lines))
@@ -184,7 +172,6 @@ def WordCounter(textFile, debug=0):
     except:
         print("No such file found. Aborting...")
         exit()
-
     # skipping the articles and importing the mapping
     mapping = wordMapper(textFile)
     if debug:
@@ -210,9 +197,7 @@ def extractKeywords(textFile, debug=0):
         if debug:
             print(words_in_line)
         words.extend(words_in_line)
-
     words = list(filter(None, words)) # removes empty string (which might come due to space and immediate \n)
-    
     return words
 
 # ------ functions using NLTK -------
