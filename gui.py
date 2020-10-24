@@ -3,8 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import font
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
+#from matplotlib.figure import Figure
 import API
 
 # ----------- Custom Classes ----------------------
@@ -50,7 +51,7 @@ class CustomText(tk.Text):
 #-------------window and tabs-----------------------
 window = tk.Tk()
 window.title("Text Analysis App")
-# window.attributes("-zoomed",True)   #ubuntu
+window.attributes("-zoomed",True)   #ubuntu
 #window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
@@ -72,26 +73,19 @@ path_of_file2= tk.StringVar()
 lines_with_keywords = tk.StringVar()
 main_file = tk.StringVar()
 keyword_file = tk.StringVar()
-fig = Figure(figsize=(12,4), dpi=100)
+fig = plt.Figure(figsize=(8,4), dpi=100)
 
 
 # ----------functions--------------------------------
 # function to open and access file
 def open_file(is_keyword_file = False):
-    file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
+    file = filedialog.askopenfilename(initialdir="~")
     if (not is_keyword_file): 
         main_file.set(file)
         path_of_file.set(file)
     else:
         keyword_file.set(file)
         path_of_file2.set(file)
-    
-    file = open(file,"r")   # opened in r mode
-    data = file.read()      # file info stored in data var
-    
-    #print(data)             # use file
-    
-    file.close()            # close file
 
 
 # refresh file to update info
@@ -101,8 +95,6 @@ def refresh_file():
     
     freq_graph()
     print("function to refresh file")
-
-
 
     
 # set stats variable inside this function
@@ -135,8 +127,6 @@ def calc():
 def freq_graph():
     fig.clf()
     file_path = main_file.get()
-    word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
-    word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
     mapping = API.wordMapper(file_path)
     word_list = list(mapping.keys())
     word_count_list = list(mapping.values())
@@ -144,7 +134,9 @@ def freq_graph():
 
     # figure to show graph
     #fig = Figure(figsize=(12,4), dpi=100)
-    fig.add_subplot(111).bar(word_list, word_count_list)
+    ax = fig.add_subplot(111)
+    ax.bar(word_list, word_count_list)
+    ax.set_xticklabels(word_list, rotation=90)
     
     canvas = FigureCanvasTkAgg(fig, master=tab1)
     canvas.draw()
@@ -205,7 +197,7 @@ entry_ct_words = tk.Entry(tab1, textvariable=count_words)
 entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
 #tk.Label(window, text="field").grid(row=11, column=3)
-#x = tk.Entry(w# find lines with keywords
+
 def extract_data(debug=False):
 
     main_file_path = main_file.get()   # file path of selected file
@@ -225,9 +217,6 @@ def extract_data(debug=False):
 
 
     text_box.delete('1.0',tk.END)
-    # set extracted in var lines_with_keywords
-    # lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
-    # text_box.insert(tk.END, lines_with_keywords)
 
     for kwrds, sentences in kwrd_sent_map.items():
         text_box.insert(tk.END, f"{kwrds} is found in following sentences - \n")
@@ -274,7 +263,7 @@ extract_button = tk.Button(tab2, text="Get lines", command= lambda: extract_data
 extract_button.grid(row=18,column=3, pady=(40,5))
 label_show = tk.Label(tab2, text="Sentences with keywords:- ")
 label_show.grid(row=19, column=3)
-text_box = CustomText(tab2, height=50, width=150)
+text_box = CustomText(tab2, height=50, width=100)
 text_box.grid(row=20,column=4)
 text_box.tag_configure("highlight", foreground="red", background="black")
 
