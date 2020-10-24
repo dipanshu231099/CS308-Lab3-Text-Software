@@ -5,13 +5,52 @@ from tkinter import filedialog
 from tkinter import font
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
+import API
 
+# ----------- Custom Classes ----------------------
+class CustomText(tk.Text):
+    '''A text widget with a new method, highlight_pattern()
+
+    example:
+
+    text = CustomText()
+    text.tag_configure("red", foreground="#ff0000")
+    text.highlight_pattern("this should be red", "red")
+
+    The highlight_pattern method is a simplified python
+    version of the tcl code at http://wiki.tcl.tk/3246
+    '''
+    def __init__(self, *args, **kwargs):
+        tk.Text.__init__(self, *args, **kwargs)
+
+    def highlight_pattern(self, pattern, tag, start="1.0", end="end",
+                        regexp=False):
+        '''Apply the given tag to all text that matches the given pattern
+
+        If 'regexp' is set to True, pattern will be treated as a regular
+        expression.
+        '''
+
+        start = self.index(start)
+        end = self.index(end)
+        self.mark_set("matchStart", start)
+        self.mark_set("matchEnd", start)
+        self.mark_set("searchLimit", end)
+
+        count = tk.IntVar()
+        while True:
+            index = self.search(pattern, "matchEnd","searchLimit",
+                                count=count, regexp=regexp)
+            if index == "": break
+            self.mark_set("matchStart", index)
+            self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
+            self.tag_add(tag, "matchStart", "matchEnd")
 
 
 #-------------window and tabs-----------------------
 window = tk.Tk()
 window.title("Text Analysis App")
-window.attributes("-zoomed",True)   #ubuntu
+# window.attributes("-zoomed",True)   #ubuntu
 #window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
@@ -29,42 +68,77 @@ count_words = tk.StringVar()
 word_most = tk.StringVar()
 word_least = tk.StringVar()
 lines_with_keywords = tk.StringVar()
-
+main_file = tk.StringVar()
+keyword_file = tk.StringVar()
+fig = Figure(figsize=(12,4), dpi=100)
 
 
 # ----------functions--------------------------------
 # function to open and access file
-def open_file():
+def open_file(is_keyword_file = False):
     file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
+    if (not is_keyword_file): 
+        main_file.set(file)
+    else:
+        keyword_file.set(file)
     file = open(file,"r")   # opened in r mode
     data = file.read()      # file info stored in data var
     
-    print(data)             # use file
+    #print(data)             # use file
     
     file.close()            # close file
 
 
 # refresh file to update info
 def refresh_file():
+    calc()
+    #canvas.delete("all")
     
+    freq_graph()
     print("function to refresh file")
+
+
 
     
 # set stats variable inside this function
 def calc():
-    word_most.set("lincoln") # eg- set most freq word= lincoln
-    word_least.set("trump")
-    count_sentence.set("10")
-    count_words.set("50")
+    
+    file_path = main_file.get()   ## file path of selected file
+    print("File path is-",file_path)
+    
+    ## calculating most frequent word
+    most_freq = (API.mostOccuringWords(file_path))[0][0]
+    print("Most frquent word is" , most_freq)
+    word_most.set(most_freq)
+
+    ## calculating least frequent word
+    least_freq = (API.leastOccuringWord(file_path))[0][0]
+    print("Least frquent word is" , least_freq)
+    word_least.set(least_freq)
+
+    ## Number of sentences/lines
+    sentence_count = API.lineCounter(file_path)
+    count_sentence.set(sentence_count)
+
+    ## Calculating words count
+    word_count = (API.WordCounter(file_path)) 
+    print("The word count is" , word_count)
+    count_words.set(word_count)
 
 
 # function to plot graph
 def freq_graph():
+    fig.clf()
+    file_path = main_file.get()
     word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
     word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
-    
+    mapping = API.wordMapper(file_path)
+    word_list = list(mapping.keys())
+    word_count_list = list(mapping.values())
+
+
     # figure to show graph
-    fig = Figure(figsize=(12,4), dpi=100)
+    #fig = Figure(figsize=(12,4), dpi=100)
     fig.add_subplot(111).bar(word_list, word_count_list)
     
     canvas = FigureCanvasTkAgg(fig, master=tab1)
@@ -76,15 +150,6 @@ def freq_graph():
     toolbar= NavigationToolbar2Tk(canvas,toolbarFrame)
     toolbar.update()
     canvas.get_tk_widget().grid(row=14,column=4)
-    
-
-# find lines with keywords
-def extract_data():
-    text_box.delete('1.0',tk.END)
-    # set extracted in var lines_with_keywords
-    lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
-    text_box.insert(tk.END, lines_with_keywords)
-
 
 
 #----------------GUI objects----------------------------------
@@ -128,9 +193,41 @@ entry_ct_words = tk.Entry(tab1, textvariable=count_words)
 entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
 #tk.Label(window, text="field").grid(row=11, column=3)
-#x = tk.Entry(window, textvariable=variable_to_set)
-#x.grid(row=11, column=4)
+#x = tk.Entry(w# find lines with keywords
+def extract_data(debug=False):
 
+    main_file_path = main_file.get()   # file path of selected file
+    if debug: print("File path is-",main_file_path)
+
+    keyword_file_path = keyword_file.get()
+    if debug: print("Keyword file path -", keyword_file_path)
+
+    keywords = API.extractKeywords(keyword_file_path)
+    if debug: print("Keywords: ", keywords)
+
+    sentences = API.extractSentences(main_file_path)
+    if debug: print("sentences: ", sentences)
+
+    kwrd_sent_map = API.keywordMapper(sentences, keywords)
+    if debug: print("Keywords-Sentences-Map: ", kwrd_sent_map)
+
+
+    text_box.delete('1.0',tk.END)
+    # set extracted in var lines_with_keywords
+    # lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
+    # text_box.insert(tk.END, lines_with_keywords)
+
+    for kwrds, sentences in kwrd_sent_map.items():
+        text_box.insert(tk.END, f"{kwrds} is found in following sentences - \n")
+        for sentence in sentences:
+            text_box.insert(tk.END, f"{sentence}\n")
+        text_box.insert(tk.END, "\n")
+        text_box.highlight_pattern(kwrds, "highlight")
+        indow, textvariable=variable_to_set
+#x.grid(row=11, column=4)
+def refresh_file_tab2():
+    extract_data()
+    print("Tab2 refresh")
 
 # histogram
 graph_button = tk.Button(tab1, text="Frequency Graph", command=freq_graph, font=custom_font)
@@ -146,20 +243,21 @@ label_key2 = tk.Label(tab2, text = "-   File")
 label_key2.grid(row=15, column=3,pady=(80,5))
 label_key2.config(font=("Courier",20))
 
-open_button_key = tk.Button(tab2, text="select file", command=open_file)  # open file fn used here
+open_button_key = tk.Button(tab2, text="select file", command=lambda: open_file(is_keyword_file=True))  # open file fn used here
 open_button_key.grid(row=16, column=2)
 
-refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file)   # refresh file fn used here
+refresh_button_key = tk.Button(tab2, text="Refresh file", command=refresh_file_tab2)   # refresh file fn used here
 refresh_button_key.grid(row=16, column=3)
 
 
 #show sentences with keywords
-extract_button = tk.Button(tab2, text="Get lines", command= extract_data, font=custom_font)
+extract_button = tk.Button(tab2, text="Get lines", command= lambda: extract_data(debug=True), font=custom_font)
 extract_button.grid(row=18,column=3, pady=(40,5))
 label_show = tk.Label(tab2, text="Sentences with keywords:- ")
 label_show.grid(row=19, column=3)
-text_box = tk.Text(tab2, height=50, width=150)
+text_box = CustomText(tab2, height=50, width=150)
 text_box.grid(row=20,column=4)
+text_box.tag_configure("highlight", foreground="red", background="black")
 
 
 
