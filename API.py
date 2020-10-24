@@ -92,7 +92,7 @@ def mostOccuringWords(textFile, debug=0):
         txt = open(textFile).read()
     except:
         print("No such file found. Aborting...")
-        exit()
+        
     # removing empty lines
     lines=txt.split('\n')
     removeEmptyLines(lines)
