@@ -73,7 +73,7 @@ path_of_file2= tk.StringVar()
 lines_with_keywords = tk.StringVar()
 main_file = tk.StringVar()
 keyword_file = tk.StringVar()
-fig = plt.Figure(figsize=(12,4), dpi=100)
+fig = plt.Figure(figsize=(8,4), dpi=100)
 
 
 # ----------functions--------------------------------
@@ -263,7 +263,7 @@ extract_button = tk.Button(tab2, text="Get lines", command= lambda: extract_data
 extract_button.grid(row=18,column=3, pady=(40,5))
 label_show = tk.Label(tab2, text="Sentences with keywords:- ")
 label_show.grid(row=19, column=3)
-text_box = CustomText(tab2, height=50, width=150)
+text_box = CustomText(tab2, height=50, width=100)
 text_box.grid(row=20,column=4)
 text_box.tag_configure("highlight", foreground="red", background="black")
 
