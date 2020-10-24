@@ -50,7 +50,7 @@ class CustomText(tk.Text):
 #-------------window and tabs-----------------------
 window = tk.Tk()
 window.title("Text Analysis App")
-# window.attributes("-zoomed",True)   #ubuntu
+window.attributes("-zoomed",True)   #ubuntu
 #window.attributes("-fullscreen",True)   #windows
 
 tabControl = ttk.Notebook(window)
@@ -78,20 +78,13 @@ fig = Figure(figsize=(12,4), dpi=100)
 # ----------functions--------------------------------
 # function to open and access file
 def open_file(is_keyword_file = False):
-    file = filedialog.askopenfilename(initialdir="/home/harish/IIT")
+    file = filedialog.askopenfilename(initialdir="~")
     if (not is_keyword_file): 
         main_file.set(file)
         path_of_file.set(file)
     else:
         keyword_file.set(file)
         path_of_file2.set(file)
-    
-    file = open(file,"r")   # opened in r mode
-    data = file.read()      # file info stored in data var
-    
-    #print(data)             # use file
-    
-    file.close()            # close file
 
 
 # refresh file to update info
@@ -101,8 +94,6 @@ def refresh_file():
     
     freq_graph()
     print("function to refresh file")
-
-
 
     
 # set stats variable inside this function
@@ -135,8 +126,6 @@ def calc():
 def freq_graph():
     fig.clf()
     file_path = main_file.get()
-    word_list=["jimmy","arnold","xyz","json","m","a","b","json","c","d","e","f","g","h","i","j","k"]    # x
-    word_count_list=[30,80,67,99,1,80,67,99,1,80,67,99,1,80,67,99,1]                                    # y
     mapping = API.wordMapper(file_path)
     word_list = list(mapping.keys())
     word_count_list = list(mapping.values())
@@ -205,7 +194,7 @@ entry_ct_words = tk.Entry(tab1, textvariable=count_words)
 entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
 #tk.Label(window, text="field").grid(row=11, column=3)
-#x = tk.Entry(w# find lines with keywords
+
 def extract_data(debug=False):
 
     main_file_path = main_file.get()   # file path of selected file
@@ -225,9 +214,6 @@ def extract_data(debug=False):
 
 
     text_box.delete('1.0',tk.END)
-    # set extracted in var lines_with_keywords
-    # lines_with_keywords="qwertyuiopasdfghjklzxcvbnmaaaaaaaaaaaaaaaassssssssssssdsfafdfffffffffffffff\nhi this is LAP\n"
-    # text_box.insert(tk.END, lines_with_keywords)
 
     for kwrds, sentences in kwrd_sent_map.items():
         text_box.insert(tk.END, f"{kwrds} is found in following sentences - \n")
