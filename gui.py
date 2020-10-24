@@ -3,8 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import font
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
+#from matplotlib.figure import Figure
 import API
 
 # ----------- Custom Classes ----------------------
@@ -72,7 +73,7 @@ path_of_file2= tk.StringVar()
 lines_with_keywords = tk.StringVar()
 main_file = tk.StringVar()
 keyword_file = tk.StringVar()
-fig = Figure(figsize=(12,4), dpi=100)
+fig = plt.Figure(figsize=(12,4), dpi=100)
 
 
 # ----------functions--------------------------------
@@ -133,7 +134,9 @@ def freq_graph():
 
     # figure to show graph
     #fig = Figure(figsize=(12,4), dpi=100)
-    fig.add_subplot(111).bar(word_list, word_count_list)
+    ax = fig.add_subplot(111)
+    ax.bar(word_list, word_count_list)
+    ax.set_xticklabels(word_list, rotation=90)
     
     canvas = FigureCanvasTkAgg(fig, master=tab1)
     canvas.draw()
