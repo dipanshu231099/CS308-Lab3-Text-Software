@@ -29,6 +29,7 @@ In a nutshell the role of each file is as follows:
     - Helping to make code easier to understand. The API itself being a pool of functions helps to reduce the clutter in backend and frontend which can readily import these functionalities
 
 2. **Frontend**
+    - For detailed documentation of frontend refer **`documentation_frontend.md`** under **`docs/`** subfolder
     - Enabling the user to easily surf through the rich array of functionalities provided by the backend and API
     - Tinker based easy to understand and implement bug free Graphical User Interface.
     - Two different tabs for:
