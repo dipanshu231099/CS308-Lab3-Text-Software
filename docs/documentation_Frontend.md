@@ -39,6 +39,6 @@ The implementation has been done in Python 3, with Tkinter.
 - Keywords file
   - Select File Button : This Button lets you select the text file form the file explorer. 
   - Refresh File Button : This button when clicked software loads the modified file and provide the updated statistics.
-  - Get Lines Button: This button when clicked the software extracts all the sentences containing the keywords and display those secntences in the gui.
+  - Get Lines Button: This button when clicked the software extracts all the sentences containing the keywords and display those secntences in the gui of software.
  
 
