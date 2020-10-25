@@ -155,7 +155,7 @@ custom_font = font.Font(family='Helvetica', size=15)    # font
 label = tk.Label(tab1, text = "Text Analytics")
 label.grid(row=1, column=4, pady=(40,0))
 label.config(width=30)
-label.config(font=("Courier",44))
+label.config(font=("Courier",44,'underline'))
 
 # main file
 label_main = tk.Label(tab1, text = "Main File")
@@ -180,19 +180,19 @@ refresh_button_main.grid(row=4, column=3)
 stats_button = tk.Button(tab1, text="Calculate stats", command= calc, font=custom_font) # calc fn used here
 stats_button.grid(row=6, column=2, pady=(50,5), padx=(20,0))
 
-tk.Label(tab1, text="Most frequent word").grid(row=7, column=2)
+tk.Label(tab1, text="Most frequent word : ").grid(row=7, column=2)
 entry_most = tk.Entry(tab1, textvariable=word_most)
 entry_most.grid(row=7, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="Least frequent word").grid(row=8, column=2)
+tk.Label(tab1, text="Least frequent word : ").grid(row=8, column=2)
 entry_least = tk.Entry(tab1, textvariable=word_least)
 entry_least.grid(row=8, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="No. of sentence").grid(row=9, column=2)
+tk.Label(tab1, text="No. of sentence : ").grid(row=9, column=2)
 entry_ct_sentence = tk.Entry(tab1, textvariable=count_sentence)
 entry_ct_sentence.grid(row=9, column=3, pady=(0,5), padx=(20,0))
 
-tk.Label(tab1, text="No. of words").grid(row=10, column=2)
+tk.Label(tab1, text="No. of words : ").grid(row=10, column=2)
 entry_ct_words = tk.Entry(tab1, textvariable=count_words)
 entry_ct_words.grid(row=10, column=3, pady=(0,5), padx=(20,0))
 
