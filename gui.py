@@ -155,7 +155,7 @@ custom_font = font.Font(family='Helvetica', size=15)    # font
 label = tk.Label(tab1, text = "Text Analytics")
 label.grid(row=1, column=4, pady=(40,0))
 label.config(width=30)
-label.config(font=("Courier",44))
+label.config(font=("Courier",44,'underline'))
 
 # main file
 label_main = tk.Label(tab1, text = "Main File")
