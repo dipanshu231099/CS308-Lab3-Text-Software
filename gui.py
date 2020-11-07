@@ -219,9 +219,8 @@ def extract_data(debug=False):
     text_box.delete('1.0',tk.END)
 
     for kwrds, sentences in kwrd_sent_map.items():
-        text_box.insert(tk.END, f"{kwrds} is found in following sentences - \n")
         for sentence in sentences:
-            text_box.insert(tk.END, f"{sentence}\n")
+            text_box.insert(tk.END, sentence+"\n")
         text_box.insert(tk.END, "\n")
         text_box.highlight_pattern(kwrds, "highlight")
         indow, textvariable=variable_to_set
